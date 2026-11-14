@@ -50,13 +50,13 @@ export default function HomePage() {
                 <h2 className="font-semibold text-zinc-900 uppercase tracking-wider mb-1">
                   Ketentuan Naskah Laporan
                 </h2>
-                <p>Diunggah per kelompok (1 atau 2 siswa) dalam dua format sekaligus: file mentah (.DOCX) dan file siap cetak (.PDF), maksimal 25 MB per file.</p>
+                <p>Diunggah per kelompok (1 atau 2 siswa). File Word (.DOCX) wajib dilampirkan, sedangkan versi PDF bersifat opsional (maksimal 25 MB per file).</p>
               </div>
               <div>
                 <h2 className="font-semibold text-zinc-900 uppercase tracking-wider mb-1">
                   Ketentuan Slide Presentasi
                 </h2>
-                <p>Diunggah per individu. Wajib melampirkan file presentasi (.PPTX/.PDF) atau tautan desain Canva dengan akses publik.</p>
+                <p>Diunggah per individu. Wajib mengunggah file presentasi (.PPTX atau .PDF), serta dapat melampirkan tautan Canva jika mendesain di Canva.</p>
               </div>
             </div>
           </aside>

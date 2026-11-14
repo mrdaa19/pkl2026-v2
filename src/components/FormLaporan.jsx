@@ -18,6 +18,11 @@ export default function FormLaporan() {
   const [fileDocx, setFileDocx] = useState(null);
   const [filePdf, setFilePdf] = useState(null);
 
+  const handleNisChange = (field, value) => {
+    const onlyDigits = value.replace(/\D/g, "").slice(0, 6);
+    setForm((prev) => ({ ...prev, [field]: onlyDigits }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ type: "", message: "" });
@@ -74,16 +79,21 @@ export default function FormLaporan() {
           </div>
           <div>
             <label htmlFor="s1-nis" className="block text-xs font-medium text-zinc-700 mb-1.5">
-              NIS Siswa 1 *
+              NIS Siswa 1 * (5-6 digit)
             </label>
             <input
               id="s1-nis"
               type="text"
+              inputMode="numeric"
+              pattern="\d{5,6}"
+              minLength={5}
+              maxLength={6}
               required
+              title="NIS harus berupa 5 sampai 6 digit angka"
               value={form.siswa1_nis}
-              onChange={(e) => setForm({ ...form, siswa1_nis: e.target.value })}
-              className="input-editorial"
-              placeholder="Nomor Induk Siswa"
+              onChange={(e) => handleNisChange("siswa1_nis", e.target.value)}
+              className="input-editorial tabular-nums"
+              placeholder="Contoh: 23456"
             />
           </div>
         </div>
@@ -104,15 +114,20 @@ export default function FormLaporan() {
           </div>
           <div>
             <label htmlFor="s2-nis" className="block text-xs font-medium text-zinc-700 mb-1.5">
-              NIS Siswa 2 (Opsional)
+              NIS Siswa 2 (Opsional, 5-6 digit)
             </label>
             <input
               id="s2-nis"
               type="text"
+              inputMode="numeric"
+              pattern="\d{5,6}"
+              minLength={5}
+              maxLength={6}
+              title="NIS harus berupa 5 sampai 6 digit angka"
               value={form.siswa2_nis}
-              onChange={(e) => setForm({ ...form, siswa2_nis: e.target.value })}
-              className="input-editorial"
-              placeholder="NIS anggota kedua"
+              onChange={(e) => handleNisChange("siswa2_nis", e.target.value)}
+              className="input-editorial tabular-nums"
+              placeholder="Contoh: 23457"
             />
           </div>
         </div>
@@ -170,13 +185,12 @@ export default function FormLaporan() {
           </div>
           <div>
             <label htmlFor="file-pdf" className="block text-xs font-medium text-zinc-700 mb-1.5">
-              Naskah PDF (.PDF) *
+              Naskah PDF (.PDF) (Opsional)
             </label>
             <input
               id="file-pdf"
               type="file"
               accept=".pdf"
-              required
               onChange={(e) => setFilePdf(e.target.files[0] || null)}
               className="file-editorial"
             />

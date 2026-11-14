@@ -7,6 +7,7 @@ import { submitSlidePKL } from "@/lib/pklService";
 export default function FormSlide() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
+  const [pakaiCanva, setPakaiCanva] = useState("tidak");
   const [form, setForm] = useState({
     nama_siswa: "",
     nis: "",
@@ -16,15 +17,28 @@ export default function FormSlide() {
   });
   const [fileSlide, setFileSlide] = useState(null);
 
+  const handleNisChange = (value) => {
+    const onlyDigits = value.replace(/\D/g, "").slice(0, 6);
+    setForm((prev) => ({ ...prev, nis: onlyDigits }));
+  };
+
+  const handleCanvaOption = (choice) => {
+    setPakaiCanva(choice);
+    if (choice === "tidak") {
+      setForm((prev) => ({ ...prev, link_canva: "" }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ type: "", message: "" });
     setLoading(true);
 
     try {
-      await submitSlidePKL(form, fileSlide);
+      await submitSlidePKL(form, fileSlide, pakaiCanva);
       setStatus({ type: "success", message: "Slide presentasi berhasil dikirim." });
       setForm({ nama_siswa: "", nis: "", kelas: "12 DKV 1", tempat_pkl: "", link_canva: "" });
+      setPakaiCanva("tidak");
       setFileSlide(null);
       e.target.reset();
     } catch (err) {
@@ -67,16 +81,21 @@ export default function FormSlide() {
         </div>
         <div>
           <label htmlFor="sld-nis" className="block text-xs font-medium text-zinc-700 mb-1.5">
-            NIS *
+            NIS * (5-6 digit)
           </label>
           <input
             id="sld-nis"
             type="text"
+            inputMode="numeric"
+            pattern="\d{5,6}"
+            minLength={5}
+            maxLength={6}
             required
+            title="NIS harus berupa 5 sampai 6 digit angka"
             value={form.nis}
-            onChange={(e) => setForm({ ...form, nis: e.target.value })}
-            className="input-editorial"
-            placeholder="Nomor Induk Siswa"
+            onChange={(e) => handleNisChange(e.target.value)}
+            className="input-editorial tabular-nums"
+            placeholder="Contoh: 23456"
           />
         </div>
       </div>
@@ -113,33 +132,70 @@ export default function FormSlide() {
         </div>
       </div>
 
-      <div className="space-y-4 pt-4 border-t border-zinc-200">
+      <div className="space-y-5 pt-4 border-t border-zinc-200">
         <div>
           <label htmlFor="file-slide" className="block text-xs font-medium text-zinc-700 mb-1.5">
-            Upload File Slide (.PPTX / .PDF)
+            Upload File Slide (.PPTX / .PDF) *
           </label>
           <input
             id="file-slide"
             type="file"
             accept=".ppt,.pptx,.pdf"
+            required
             onChange={(e) => setFileSlide(e.target.files[0] || null)}
             className="file-editorial"
           />
         </div>
 
-        <div>
-          <label htmlFor="link-canva" className="block text-xs font-medium text-zinc-700 mb-1.5">
-            Atau Tempel Tautan Canva
-          </label>
-          <input
-            id="link-canva"
-            type="url"
-            value={form.link_canva}
-            onChange={(e) => setForm({ ...form, link_canva: e.target.value })}
-            className="input-editorial"
-            placeholder="https://www.canva.com/design/..."
-          />
-        </div>
+        <fieldset className="space-y-3">
+          <legend className="text-xs font-medium text-zinc-700">
+            Apakah presentasi Anda dibuat menggunakan Canva?
+          </legend>
+          <div className="flex gap-6">
+            <label className="inline-flex items-center gap-2 text-xs text-zinc-800 cursor-pointer">
+              <input
+                type="radio"
+                name="pakai_canva"
+                value="tidak"
+                checked={pakaiCanva === "tidak"}
+                onChange={() => handleCanvaOption("tidak")}
+                className="accent-amber-800"
+              />
+              Tidak
+            </label>
+            <label className="inline-flex items-center gap-2 text-xs text-zinc-800 cursor-pointer">
+              <input
+                type="radio"
+                name="pakai_canva"
+                value="ya"
+                checked={pakaiCanva === "ya"}
+                onChange={() => handleCanvaOption("ya")}
+                className="accent-amber-800"
+              />
+              Ya, pakai Canva
+            </label>
+          </div>
+        </fieldset>
+
+        {pakaiCanva === "ya" && (
+          <div className="border-l-2 border-amber-700 pl-4 py-1">
+            <label htmlFor="link-canva" className="block text-xs font-medium text-zinc-700 mb-1.5">
+              Link Desain Canva *
+            </label>
+            <input
+              id="link-canva"
+              type="url"
+              required
+              value={form.link_canva}
+              onChange={(e) => setForm({ ...form, link_canva: e.target.value })}
+              className="input-editorial"
+              placeholder="https://www.canva.com/design/..."
+            />
+            <p className="text-[11px] text-zinc-500 mt-1">
+              Pastikan pengaturan berbagi link Canva sudah dibuka untuk siapa saja yang memiliki tautan.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="pt-2">

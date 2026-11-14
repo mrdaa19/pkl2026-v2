@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase, CONFIG_PKL } from "@/lib/supabase";
 import { fetchSemuaRekap, hapusLaporanPKL, hapusSlidePKL } from "@/lib/pklService";
+import EditDrawer from "@/components/EditDrawer";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function AdminDashboard() {
   const [tab, setTab] = useState("laporan");
   const [filterKelas, setFilterKelas] = useState("");
   const [search, setSearch] = useState("");
+  const [editState, setEditState] = useState(null); // { type: 'laporan' | 'slide', item }
 
   useEffect(() => {
     const init = async () => {
@@ -95,7 +97,6 @@ export default function AdminDashboard() {
       </header>
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-8 space-y-8">
-        {/* Ringkasan Angka Editorial (Bersekat Vertikal, Bukan Kartu Kembar) */}
         <section aria-label="Ringkasan Statistik" className="grid grid-cols-2 border-y border-zinc-200 divide-x divide-zinc-200 py-4">
           <div className="pr-6">
             <p className="text-xs uppercase tracking-wider text-zinc-500">Naskah Laporan Masuk</p>
@@ -107,7 +108,6 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        {/* Kontrol Tab & Filter */}
         <section aria-label="Tabel Data PKL" className="space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 pb-3">
             <div className="flex gap-6">
@@ -178,10 +178,23 @@ export default function AdminDashboard() {
                       <td className="py-3 px-3">{item.tempat_pkl}</td>
                       <td className="py-3 px-3 space-x-3 font-medium">
                         <a href={item.docx_url} target="_blank" rel="noreferrer" className="text-amber-800 underline">DOCX</a>
-                        <a href={item.pdf_url} target="_blank" rel="noreferrer" className="text-teal-800 underline">PDF</a>
+                        {item.pdf_url ? (
+                          <a href={item.pdf_url} target="_blank" rel="noreferrer" className="text-teal-800 underline">PDF</a>
+                        ) : (
+                          <span className="text-zinc-400 font-normal">Tanpa PDF</span>
+                        )}
                       </td>
-                      <td className="py-3 pl-3 text-right">
-                        <button onClick={() => onDeleteLaporan(item)} className="text-red-700 hover:underline cursor-pointer">
+                      <td className="py-3 pl-3 text-right space-x-3">
+                        <button
+                          onClick={() => setEditState({ type: "laporan", item })}
+                          className="text-zinc-900 font-medium hover:text-amber-800 underline cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => onDeleteLaporan(item)}
+                          className="text-red-700 hover:underline cursor-pointer"
+                        >
                           Hapus
                         </button>
                       </td>
@@ -224,8 +237,17 @@ export default function AdminDashboard() {
                           </a>
                         )}
                       </td>
-                      <td className="py-3 pl-3 text-right">
-                        <button onClick={() => onDeleteSlide(item)} className="text-red-700 hover:underline cursor-pointer">
+                      <td className="py-3 pl-3 text-right space-x-3">
+                        <button
+                          onClick={() => setEditState({ type: "slide", item })}
+                          className="text-zinc-900 font-medium hover:text-amber-800 underline cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => onDeleteSlide(item)}
+                          className="text-red-700 hover:underline cursor-pointer"
+                        >
                           Hapus
                         </button>
                       </td>
@@ -237,6 +259,14 @@ export default function AdminDashboard() {
           )}
         </section>
       </main>
+
+      {editState && (
+        <EditDrawer
+          editState={editState}
+          onClose={() => setEditState(null)}
+          onSaved={loadData}
+        />
+      )}
     </div>
   );
 }
