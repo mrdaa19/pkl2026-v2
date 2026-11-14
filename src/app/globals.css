@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-paper: #f8f7f4;
+  --ink-primary: #18181b;
+  --border-hairline: #d4d4d8;
+  --accent-terracotta: #9a3412;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-paper);
+  color: var(--ink-primary);
+}
+
+.input-editorial {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid var(--border-hairline);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--ink-primary);
+  transition: border-color 0.15s ease;
+}
+
+.input-editorial:focus {
+  outline: none;
+  border-color: var(--accent-terracotta);
+}
+
+.file-editorial {
+  width: 100%;
+  font-size: 0.75rem;
+  color: #52525b;
+  border: 1px dashed var(--border-hairline);
+  background-color: #ffffff;
+  padding: 0.45rem;
+}
+
+.file-editorial::file-selector-button {
+  margin-right: 0.75rem;
+  border: none;
+  background-color: #f4f4f5;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+  cursor: pointer;
+}
+
+.file-editorial::file-selector-button:hover {
+  background-color: #e4e4e7;
 }

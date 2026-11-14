@@ -1,67 +1,115 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import Link from "next/link";
+import FormLaporan from "@/components/FormLaporan";
+import FormSlide from "@/components/FormSlide";
+
+export default function HomePage() {
+  const [activeTab, setActiveTab] = useState("laporan");
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen flex flex-col">
+      <header className="border-b border-zinc-200 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-700" aria-hidden="true" />
+            <span className="text-xs font-semibold tracking-widest uppercase text-zinc-600">
+              DKV SMK Karya Bhakti Brebes
+            </span>
+          </div>
+          <nav aria-label="Navigasi Utama">
+            <Link
+              href="/login"
+              className="text-xs font-medium text-zinc-700 hover:text-amber-800 underline underline-offset-4 transition"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Akses Admin
+            </Link>
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Kolom Kiri: Tipografi Editorial & Panduan */}
+          <aside className="lg:col-span-5 lg:sticky lg:top-10 space-y-6 border-b lg:border-b-0 lg:border-r border-zinc-200 pb-8 lg:pb-0 lg:pr-10">
+            <div>
+              <p className="text-xs font-mono uppercase tracking-wider text-amber-800 mb-2">
+                Tahun Pelajaran 2026
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">
+                Portal Pengumpulan Berkas PKL
+              </h1>
+              <p className="mt-3 text-sm text-zinc-600 leading-relaxed">
+                Gunakan portal ini untuk mengunggah naskah laporan akhir dan materi presentasi sidang PKL kelas 12 DKV 1 maupun 12 DKV 2.
+              </p>
+            </div>
+
+            <div className="space-y-4 pt-4 border-t border-zinc-200 text-xs text-zinc-600">
+              <div>
+                <h2 className="font-semibold text-zinc-900 uppercase tracking-wider mb-1">
+                  Ketentuan Naskah Laporan
+                </h2>
+                <p>Diunggah per kelompok (1 atau 2 siswa) dalam dua format sekaligus: file mentah (.DOCX) dan file siap cetak (.PDF), maksimal 25 MB per file.</p>
+              </div>
+              <div>
+                <h2 className="font-semibold text-zinc-900 uppercase tracking-wider mb-1">
+                  Ketentuan Slide Presentasi
+                </h2>
+                <p>Diunggah per individu. Wajib melampirkan file presentasi (.PPTX/.PDF) atau tautan desain Canva dengan akses publik.</p>
+              </div>
+            </div>
+          </aside>
+
+          {/* Kolom Kanan: Workspace Formulir */}
+          <section className="relative z-10 lg:col-span-7" aria-label="Formulir Pengumpulan Berkas">
+            <div
+              role="tablist"
+              aria-label="Jenis Berkas PKL"
+              className="flex border-b border-zinc-200 mb-8 gap-6"
+            >
+              <button
+                type="button"
+                role="tab"
+                id="tab-laporan"
+                aria-selected={activeTab === "laporan"}
+                aria-controls="panel-laporan"
+                onClick={() => setActiveTab("laporan")}
+                className={`py-3 px-1 text-sm font-semibold border-b-2 transition cursor-pointer select-none ${
+                  activeTab === "laporan"
+                    ? "border-amber-700 text-zinc-900"
+                    : "border-transparent text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                01. Naskah Laporan
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="tab-slide"
+                aria-selected={activeTab === "slide"}
+                aria-controls="panel-slide"
+                onClick={() => setActiveTab("slide")}
+                className={`py-3 px-1 text-sm font-semibold border-b-2 transition cursor-pointer select-none ${
+                  activeTab === "slide"
+                    ? "border-amber-700 text-zinc-900"
+                    : "border-transparent text-zinc-500 hover:text-zinc-900"
+                }`}
+              >
+                02. Slide Presentasi
+              </button>
+            </div>
+
+            {activeTab === "laporan" ? (
+              <div id="panel-laporan" role="tabpanel" aria-labelledby="tab-laporan">
+                <FormLaporan />
+              </div>
+            ) : (
+              <div id="panel-slide" role="tabpanel" aria-labelledby="tab-slide">
+                <FormSlide />
+              </div>
+            )}
+          </section>
         </div>
       </main>
     </div>
